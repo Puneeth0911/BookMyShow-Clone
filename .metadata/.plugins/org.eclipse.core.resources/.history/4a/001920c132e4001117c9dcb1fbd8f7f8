@@ -1,0 +1,88 @@
+package com.alpha.customerService.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.alpha.customerService.dto.CreateCustomerDto;
+import com.alpha.customerService.dto.MovieDto;
+import com.alpha.customerService.dto.ResponseStructure;
+import com.alpha.customerService.entity.Customer;
+import com.alpha.customerService.exception.CustomerAlreadyExistWithPhoneException;
+import com.alpha.customerService.repository.CustomerRepository;
+
+@Service
+public class CustomerService {
+
+	@Autowired
+	private CustomerRepository customerRepo;
+
+	public ResponseEntity<ResponseStructure<Customer>> createCustomerAccount(CreateCustomerDto createCustomerDto) {
+		Optional<Customer> customerOptional = customerRepo.findByPhone(createCustomerDto.getPhone());
+		System.out.println("Received Phone: " + createCustomerDto.getPhone());
+		System.out.println("Is Phone Present: " + customerOptional.isPresent());
+		if (customerOptional.isPresent()) {
+			throw new CustomerAlreadyExistWithPhoneException();
+		}
+		Customer newCustomer = new Customer();
+		newCustomer.setName(createCustomerDto.getName());
+		newCustomer.setMail(createCustomerDto.getMail());
+		newCustomer.setPhone(createCustomerDto.getPhone());
+		newCustomer.setAge(createCustomerDto.getAge());
+		newCustomer.setGender(createCustomerDto.getGender());
+		Customer savedCustomer = customerRepo.save(newCustomer);
+		ResponseStructure<Customer> responseStructure = new ResponseStructure<Customer>();
+		responseStructure.setStatuscode(HttpStatus.CREATED.value());
+		responseStructure.setMessage("NEW CUSTOMER CREATED SUCCESSFULLY");
+		responseStructure.setData(savedCustomer);
+		return new ResponseEntity<ResponseStructure<Customer>>(responseStructure, HttpStatus.CREATED);
+	}
+
+	public ResponseEntity<ResponseStructure<Customer>> findCustomerById(long id) {
+		Optional<Customer> customerOptional = customerRepo.findById(id);
+		ResponseStructure<Customer> responseStructure = new ResponseStructure<Customer>();
+		if (customerOptional.isPresent()) {
+			Customer customer = customerOptional.get();
+			responseStructure.setStatuscode(HttpStatus.OK.value());
+			responseStructure.setMessage("CUSTOMER FOUND SUCCESSFULLY");
+			responseStructure.setData(customer);
+			return new ResponseEntity<ResponseStructure<Customer>>(responseStructure, HttpStatus.OK);
+		}
+		responseStructure.setStatuscode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setMessage("CUSTOMER NOT FOUND");
+		responseStructure.setData(null);
+		return new ResponseEntity<ResponseStructure<Customer>>(responseStructure, HttpStatus.NOT_FOUND);
+	}
+
+	public ResponseEntity<ResponseStructure<String>> deleteCustomer(long id) {
+		Optional<Customer> customerOptional = customerRepo.findById(id);
+		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
+		if (customerOptional.isPresent()) {
+			Customer customer = customerOptional.get();
+			customerRepo.delete(customer);
+			responseStructure.setStatuscode(HttpStatus.OK.value());
+			responseStructure.setMessage("CUSTOMER DELETED SUCCESSFULLY");
+			responseStructure.setData("Customer deleted successfully");
+			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.OK);
+		}
+		responseStructure.setStatuscode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setMessage("CUSTOMER NOT FOUND");
+		responseStructure.setData(null);
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NOT_FOUND);
+	}
+
+	@Autowired
+	RestTemplate restTemplate;
+	public MovieDto findMovie(String title) {
+		String url="http://localhost:8085/findMovie?title="+title;
+		System.out.println(url);
+		MovieDto obj=restTemplate.getForObject(url, MovieDto.class);
+		System.out.println(obj);
+		return obj;
+	}
+
+}

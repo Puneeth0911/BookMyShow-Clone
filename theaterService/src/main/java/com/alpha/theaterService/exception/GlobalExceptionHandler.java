@@ -1,0 +1,32 @@
+package com.alpha.theaterService.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.alpha.theaterService.dto.ResponseStructure;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+	@ExceptionHandler(TheaterNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> handleTheaterNotFoundException(TheaterNotFoundException e) {
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+		rs.setMessage("Theater ID not found");
+		rs.setData(e.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(rs, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(MovieNotFoundException.class)
+    public ResponseEntity<ResponseStructure<String>> handleMovieNotFound(
+            MovieNotFoundException ex) {
+        ResponseStructure<String> rs = new ResponseStructure<String>();
+        rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+        rs.setMessage(ex.getMessage());
+        rs.setData(null);
+        return new ResponseEntity<ResponseStructure<String>>(
+                rs, HttpStatus.NOT_FOUND);
+    }
+}

@@ -1,0 +1,161 @@
+
+package com.alpha.theaterService.entity;
+
+import java.sql.Date;
+import java.time.LocalTime;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "movie_show")
+public class Show {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
+
+    private String title;
+    private String description;
+    private double duration;
+    private String language;
+    private int screennumber;
+
+    @ManyToOne
+    @JoinColumn(name = "theater_id")
+    private Theater theater;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Seat> seats;
+
+    private Date date;
+    private LocalTime time;
+    private Double price;
+
+    public Show() {
+        super();
+    }
+
+    public Show(Movie movie, String title, String description,
+                double duration, String language, int screennumber,
+                Theater theater, Date date, LocalTime time) {
+        super();
+        this.movie = movie;
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+        this.language = language;
+        this.screennumber = screennumber;
+        this.theater = theater;
+        this.date = date;
+        this.time = time;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public int getScreennumber() {
+        return screennumber;
+    }
+
+    public void setScreennumber(int screennumber) {
+        this.screennumber = screennumber;
+    }
+
+    public Theater getTheater() {
+        return theater;
+    }
+
+    public void setTheater(Theater theater) {
+        this.theater = theater;
+    }
+
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+}

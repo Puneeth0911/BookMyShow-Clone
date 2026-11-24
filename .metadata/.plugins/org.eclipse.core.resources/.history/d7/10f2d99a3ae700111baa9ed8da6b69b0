@@ -1,0 +1,5 @@
+package com.alpha.theaterService.repository;
+
+public interface SeatRepository {
+
+}

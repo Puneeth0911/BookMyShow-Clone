@@ -1,0 +1,5 @@
+package com.alpha.customerService.exception;
+
+public class SeatNotFoundException {
+
+}

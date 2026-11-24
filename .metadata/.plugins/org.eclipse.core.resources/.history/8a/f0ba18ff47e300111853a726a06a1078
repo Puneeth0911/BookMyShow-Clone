@@ -1,0 +1,10 @@
+package com.alpha.theaterService.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.alpha.theaterService.entity.Movie;
+
+public interface MovieRepository extends JpaRepository<Movie, Long> {
+
+    Movie findByTitle(String title);
+	
+}

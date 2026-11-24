@@ -1,0 +1,144 @@
+
+package com.alpha.theaterService.controller;
+
+import java.sql.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.alpha.theaterService.dto.NewShowDto;
+import com.alpha.theaterService.dto.ResponseStructure;
+import com.alpha.theaterService.dto.UpdateShowDto;
+
+import com.alpha.theaterService.entity.Movie;
+import com.alpha.theaterService.entity.Seat;
+import com.alpha.theaterService.entity.Show;
+import com.alpha.theaterService.entity.Theater;
+
+import com.alpha.theaterService.service.AdminService;
+import com.alpha.theaterService.service.TheaterService;
+
+@RestController
+public class TheaterController {
+
+	@Autowired
+	private TheaterService theaterservice;
+
+	@Autowired
+	private AdminService adminservice;
+
+	// CREATE THEATER ACCOUNT
+	@PostMapping("/theater/createaccount")
+	public ResponseEntity<ResponseStructure<Theater>> createTheaterAccount(@RequestBody Theater t) {
+
+		System.out.println("Creating Theater Account");
+
+		return theaterservice.createTheaterAccount(t);
+	}
+
+	// FIND THEATER
+	@GetMapping("/theater/find")
+	public ResponseEntity<ResponseStructure<Theater>> findTheater(@RequestParam long id) {
+
+		System.out.println("Finding Theater with id " + id);
+
+		return theaterservice.findTheater(id);
+	}
+
+	// DELETE THEATER
+	@DeleteMapping("/theater/delete")
+	public ResponseEntity<ResponseStructure<String>> deleteTheater(@RequestParam long id) {
+
+		return theaterservice.deleteTheater(id);
+	}
+
+	// GET ALL MOVIES
+	@GetMapping("/theater/movie/all")
+	public ResponseEntity<ResponseStructure<List<Movie>>> getAllMovies() {
+
+		return adminservice.getAllMovies();
+	}
+
+	// CREATE NEW SHOW
+	@PostMapping("/theater/createNewShow")
+	public ResponseEntity<ResponseStructure<Show>> createNewShow(@RequestParam long theaterid,
+			@RequestBody NewShowDto dto) {
+
+		System.out.println("Creating New Show");
+
+		return theaterservice.createNewShow(theaterid, dto);
+	}
+
+	// GET ALL PLAYING SHOWS
+	@GetMapping("/theater/findAllPlayingShows")
+	public ResponseEntity<ResponseStructure<List<Show>>> getAllPlayingShows(@RequestParam long theaterid) {
+
+		return theaterservice.getAllPlayingShows(theaterid);
+	}
+
+	// FIND SHOW BY ID
+	@GetMapping("/theater/findShow")
+	public ResponseEntity<ResponseStructure<Show>> findShowById(@RequestParam long showid) {
+
+		return theaterservice.findShowById(showid);
+	}
+
+	// UPDATE SHOW
+	@PutMapping("/theater/updateShow")
+	public ResponseEntity<ResponseStructure<Show>> updateShow(@RequestParam long showid,
+			@RequestBody UpdateShowDto dto) {
+
+		return theaterservice.updateShow(showid, dto);
+	}
+
+	// FIND MOVIE BY TITLE
+	@GetMapping("/findMovie")
+	public Movie findMovie(@RequestParam String title) {
+
+		return theaterservice.findMovie(title);
+	}
+
+	// BUY TICKETS - FIND AVAILABLE SHOWS
+	@GetMapping("/customer/buytickets")
+	public ResponseEntity<ResponseStructure<List<Show>>> buyTickets(@RequestParam String moviename,
+			@RequestParam String language, @RequestParam Date date) {
+
+		return theaterservice.buyTickets(moviename, language, date);
+	}
+
+	// GET AVAILABLE SEATS (DATABASE + REDIS CHECK)
+	@GetMapping({ "/shows/seats/available", "/availableseats" })
+	public ResponseEntity<List<Seat>> getAvailableSeats(@RequestParam long showId) {
+
+		List<Seat> seats = theaterservice.getAvailableSeats(showId);
+
+		return ResponseEntity.ok(seats);
+	}
+
+	// LOCK SELECTED SEATS
+	@PostMapping("/shows/seats/lock")
+	public ResponseEntity<List<Seat>> lockSeats(@RequestParam long showId, @RequestBody List<String> seatNumbers) {
+
+		List<Seat> seats = theaterservice.lockSeats(showId, seatNumbers);
+
+		return ResponseEntity.ok(seats);
+	}
+
+	@PostMapping("/customer/buyticket")
+	public ResponseEntity<String> buyTicket(@RequestParam long id, @RequestParam long sid,
+			@RequestParam String seatno) {
+
+		String response = theaterservice.buyTicket(id, sid, seatno);
+
+		return ResponseEntity.ok(response);
+	}
+
+}

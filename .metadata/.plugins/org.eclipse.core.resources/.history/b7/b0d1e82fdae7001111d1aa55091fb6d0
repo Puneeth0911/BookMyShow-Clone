@@ -1,0 +1,334 @@
+
+package com.alpha.theaterService.service;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.alpha.theaterService.dto.NewShowDto;
+import com.alpha.theaterService.dto.ResponseStructure;
+import com.alpha.theaterService.dto.UpdateShowDto;
+
+import com.alpha.theaterService.entity.Movie;
+import com.alpha.theaterService.entity.Seat;
+import com.alpha.theaterService.entity.Show;
+import com.alpha.theaterService.entity.Theater;
+
+import com.alpha.theaterService.exception.MovieNotFoundException;
+import com.alpha.theaterService.exception.SeatNotAvailableException;
+import com.alpha.theaterService.exception.SeatNotFoundException;
+import com.alpha.theaterService.exception.ShowNotFoundException;
+import com.alpha.theaterService.exception.TheaterNotFoundException;
+
+import com.alpha.theaterService.repository.MovieRepository;
+import com.alpha.theaterService.repository.SeatRepository;
+import com.alpha.theaterService.repository.ShowRepository;
+import com.alpha.theaterService.repository.TheaterRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+public class TheaterService {
+
+	@Autowired
+	private TheaterRepository theaterrepository;
+
+	@Autowired
+	private ShowRepository showrepository;
+
+	@Autowired
+	private MovieRepository movierepository;
+
+	@Autowired
+	private SeatRepository seatRepo;
+
+	// CREATE THEATER
+	public ResponseEntity<ResponseStructure<Theater>> createTheaterAccount(Theater t) {
+
+		Theater theatersaved = theaterrepository.save(t);
+
+		ResponseStructure<Theater> rs = new ResponseStructure<>();
+		rs.setStatuscode(HttpStatus.CREATED.value());
+		rs.setMessage("Theater created successfully");
+		rs.setData(theatersaved);
+
+		return new ResponseEntity<>(rs, HttpStatus.CREATED);
+	}
+
+	// FIND THEATER
+	public ResponseEntity<ResponseStructure<Theater>> findTheater(long id) {
+
+		Theater theater = theaterrepository.findById(id).orElseThrow(() -> new TheaterNotFoundException());
+
+		ResponseStructure<Theater> rs = new ResponseStructure<>();
+		rs.setStatuscode(HttpStatus.OK.value());
+		rs.setMessage("Theater Found");
+		rs.setData(theater);
+
+		return new ResponseEntity<>(rs, HttpStatus.OK);
+	}
+
+	// DELETE THEATER
+	public ResponseEntity<ResponseStructure<String>> deleteTheater(long id) {
+
+		Theater theater = theaterrepository.findById(id).orElseThrow(() -> new TheaterNotFoundException());
+
+		theaterrepository.delete(theater);
+
+		ResponseStructure<String> rs = new ResponseStructure<>();
+		rs.setStatuscode(HttpStatus.OK.value());
+		rs.setMessage("Theater Deleted Successfully");
+		rs.setData("Theater deleted successfully");
+
+		return new ResponseEntity<>(rs, HttpStatus.OK);
+	}
+
+	// CREATE NEW SHOW
+	public ResponseEntity<ResponseStructure<Show>> createNewShow(long theaterid, NewShowDto dto) {
+
+		Theater theater = theaterrepository.findById(theaterid).orElseThrow(() -> new TheaterNotFoundException());
+
+		Movie movie = movierepository.findById(dto.getMovieId()).orElseThrow(() -> new MovieNotFoundException());
+
+		boolean exists = showrepository.existsByTheater_IdAndDateAndTimeAndScreennumber(theaterid, dto.getDate(),
+				dto.getTime(), dto.getScreennumber());
+
+		if (exists) {
+
+			ResponseStructure<Show> rs = new ResponseStructure<>();
+			rs.setStatuscode(HttpStatus.CONFLICT.value());
+			rs.setMessage("Show Already Exists");
+			rs.setData(null);
+
+			return new ResponseEntity<>(rs, HttpStatus.CONFLICT);
+		}
+
+		Show sh = new Show();
+
+		sh.setMovie(movie);
+		sh.setTheater(theater);
+		sh.setTitle(movie.getTitle());
+		sh.setDescription(dto.getDescription());
+		sh.setDuration(dto.getDuration());
+		sh.setLanguage(dto.getLanguage());
+		sh.setScreennumber(dto.getScreennumber());
+		sh.setDate(dto.getDate());
+		sh.setTime(dto.getTime());
+
+		// Set ticket price
+		sh.setPrice(dto.getPrice());
+
+		// Generate seats according to capacity
+		List<Seat> seats = generateSeats(dto.getCapacity(), sh);
+
+		sh.setSeats(seats);
+
+		// Save show and associated seats
+		Show savedShow = showrepository.save(sh);
+
+		ResponseStructure<Show> rs = new ResponseStructure<>();
+		rs.setStatuscode(HttpStatus.CREATED.value());
+		rs.setMessage("New Show Created Successfully");
+		rs.setData(savedShow);
+
+		return new ResponseEntity<>(rs, HttpStatus.CREATED);
+	}
+
+	// GENERATE SEATS
+	public List<Seat> generateSeats(int capacity, Show show) {
+
+		if (capacity <= 0) {
+			throw new IllegalArgumentException("Capacity must be positive");
+		}
+
+		List<Seat> seats = new ArrayList<>();
+
+		String[] categories = { "SILVER", "GOLD", "DIAMOND" };
+
+		int baseCapacity = capacity / 3;
+		int remainder = capacity % 3;
+
+		char row = 'A';
+
+		for (int i = 0; i < 3; i++) {
+
+			int categoryCapacity = baseCapacity;
+
+			if (i < remainder) {
+				categoryCapacity++;
+			}
+
+			int seatNumber = 1;
+
+			for (int j = 1; j <= categoryCapacity; j++) {
+
+				Seat seat = new Seat();
+
+				seat.setSeatno(row + String.valueOf(seatNumber));
+				seat.setCategory(categories[i]);
+				seat.setStatus("AVAILABLE");
+				seat.setShow(show);
+
+				seats.add(seat);
+
+				seatNumber++;
+
+				if (seatNumber > 10) {
+					seatNumber = 1;
+					row++;
+				}
+			}
+
+			if (seatNumber != 1) {
+				row++;
+			}
+		}
+
+		return seats;
+	}
+
+	// GET ALL PLAYING SHOWS
+	public ResponseEntity<ResponseStructure<List<Show>>> getAllPlayingShows(long theaterid) {
+
+		Theater theater = theaterrepository.findById(theaterid).orElseThrow(() -> new TheaterNotFoundException());
+
+		List<Show> shows = theater.getAllPlayingShows();
+
+		ResponseStructure<List<Show>> rs = new ResponseStructure<>();
+		rs.setStatuscode(HttpStatus.OK.value());
+		rs.setMessage("All Playing Shows");
+		rs.setData(shows);
+
+		return new ResponseEntity<>(rs, HttpStatus.OK);
+	}
+
+	// FIND SHOW BY ID
+	public ResponseEntity<ResponseStructure<Show>> findShowById(long showid) {
+
+		Show show = showrepository.findById(showid).orElseThrow(() -> new ShowNotFoundException());
+
+		ResponseStructure<Show> rs = new ResponseStructure<>();
+		rs.setStatuscode(HttpStatus.OK.value());
+		rs.setMessage("Show found successfully");
+		rs.setData(show);
+
+		return new ResponseEntity<>(rs, HttpStatus.OK);
+	}
+
+	// UPDATE SHOW
+	public ResponseEntity<ResponseStructure<Show>> updateShow(long showid, UpdateShowDto dto) {
+
+		Show show = showrepository.findById(showid).orElseThrow(() -> new ShowNotFoundException());
+
+		show.setDate(dto.getDate());
+		show.setTime(dto.getTime());
+		show.setScreennumber(dto.getScreennumber());
+
+		Show updatedShow = showrepository.save(show);
+
+		ResponseStructure<Show> rs = new ResponseStructure<>();
+		rs.setStatuscode(HttpStatus.OK.value());
+		rs.setMessage("Show updated successfully");
+		rs.setData(updatedShow);
+
+		return new ResponseEntity<>(rs, HttpStatus.OK);
+	}
+
+	// FIND MOVIE BY TITLE
+	public Movie findMovie(String title) {
+
+		return movierepository.findByTitle(title).orElseThrow(() -> new MovieNotFoundException());
+	}
+
+	// BUY TICKETS - FIND AVAILABLE SHOWS
+	public ResponseEntity<ResponseStructure<List<Show>>> buyTickets(String movie, String language, Date date) {
+
+		List<Show> shows = showrepository.findByTitleContainingIgnoreCaseAndLanguageIgnoreCaseAndDate(movie, language,
+				date);
+
+		ResponseStructure<List<Show>> response = new ResponseStructure<>();
+		response.setStatuscode(HttpStatus.OK.value());
+		response.setMessage("AVAILABLE SHOWS");
+		response.setData(shows);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	// FIND AVAILABLE SEATS
+	public List<Seat> findAvailableSeats(long showId) {
+
+		if (!showrepository.existsById(showId)) {
+			throw new ShowNotFoundException();
+		}
+
+		return seatRepo.findByShow_IdAndStatus(showId, "AVAILABLE");
+	}
+
+	// LOCK SELECTED SEATS
+	@Transactional
+	public List<Seat> lockSeats(long showId, List<String> seatNumbers) {
+
+		if (!showrepository.existsById(showId)) {
+			throw new ShowNotFoundException();
+		}
+
+		for (int i = 0; i < seatNumbers.size(); i++) {
+			seatNumbers.set(i, seatNumbers.get(i).toUpperCase());
+		}
+
+		List<Seat> seats = seatRepo.findByShow_IdAndSeatnoIn(showId, seatNumbers);
+
+		if (seats.size() != seatNumbers.size()) {
+			throw new SeatNotFoundException("SELECTED SEATS NOT FOUND");
+		}
+
+		for (Seat seat : seats) {
+
+			if (!seat.getStatus().equalsIgnoreCase("AVAILABLE")) {
+				throw new SeatNotAvailableException(seat.getSeatno() + " is not available");
+			}
+		}
+
+		for (Seat seat : seats) {
+			seat.setStatus("LOCKED");
+		}
+
+		seatRepo.saveAll(seats);
+
+		return seats;
+	}
+
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+
+	public List<Seat> getAvailableSeats(long showId) {
+
+	    if (!showrepository.existsById(showId)) {
+	        throw new ShowNotFoundException();
+	    }
+
+	    List<Seat> seats =
+	            seatRepo.findByShow_IdAndStatus(showId, "AVAILABLE");
+
+	    List<Seat> availableSeats = new ArrayList<>();
+
+	    for (Seat seat : seats) {
+
+	        String key = "lockseat:" + showId + ":" + seat.getSeatno();
+
+	        Boolean isLocked = redisTemplate.hasKey(key);
+
+	        if (!Boolean.TRUE.equals(isLocked)) {
+	            availableSeats.add(seat);
+	        }
+	    }
+
+	    return availableSeats;
+	}
+}
