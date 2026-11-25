@@ -1,11 +1,16 @@
 package com.alpha.customerService.service;
 
+import java.sql.Date;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -29,6 +34,7 @@ import com.alpha.customerService.exception.ShowNotFoundException;
 import com.alpha.customerService.exception.TicketNotFoundException;
 import com.alpha.customerService.repository.CustomerRepository;
 import com.alpha.customerService.repository.TicketRepository;
+import com.alpha.customerService.dto.ConfirmTicketConsent;
 
 @Service
 public class CustomerService {
@@ -38,6 +44,12 @@ public class CustomerService {
 
 	@Autowired
 	private TicketRepository ticketRepo;
+
+	@Autowired
+	RestTemplate restTemplate;
+
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
 	public ResponseEntity<ResponseStructure<Customer>> createCustomerAccount(CreateCustomerDto createCustomerDto) {
 		Optional<Customer> customerOptional = customerRepo.findByPhone(createCustomerDto.getPhone());
@@ -93,9 +105,6 @@ public class CustomerService {
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NOT_FOUND);
 	}
 
-	@Autowired
-	RestTemplate restTemplate;
-
 	public MovieDto findMovie(String title) {
 		String url = "http://localhost:8085/findMovie?title=" + title;
 		MovieDto movie = restTemplate.getForObject(url, MovieDto.class);
@@ -116,85 +125,89 @@ public class CustomerService {
 		}
 	}
 
-	public Ticket bookSeats(long customerId, long showId, List<String> seats) {
+	public void bookSeats(long customerId, long showId, List<String> seats) {
+
 		Customer customer = customerRepo.findById(customerId)
-				.orElseThrow(() -> new CustomerNotFoundException("CUSTOMER NOT FOUND"));
+				.orElseThrow(() -> new RuntimeException("Customer not found"));
 
 		if (seats == null || seats.isEmpty()) {
-			throw new IllegalArgumentException("PLEASE SELECT AT LEAST ONE SEAT");
+			throw new RuntimeException("Select at least one seat");
 		}
-		boolean seatsLocked = false;
-		try {
-			String showUrl = "http://localhost:8085/theater/findShow?showid=" + showId;
-			System.out.println("Calling Show API: " + showUrl);
-			ResponseEntity<ResponseStructure<ShowDto>> showResponse = restTemplate.exchange(showUrl, HttpMethod.GET,
-					null, new ParameterizedTypeReference<ResponseStructure<ShowDto>>() {
-					});
 
-			if (showResponse.getBody() == null || showResponse.getBody().getData() == null) {
-				throw new ShowNotFoundException("SHOW DETAILS NOT FOUND");
-			}
+		ResponseEntity<ResponseStructure<ShowDto>> response = restTemplate.exchange(
+				"http://localhost:8085/theater/findShow?showid=" + showId, HttpMethod.GET, null,
+				new ParameterizedTypeReference<ResponseStructure<ShowDto>>() {
+				});
 
-			ShowDto show = showResponse.getBody().getData();
-			System.out.println("Show details received: " + show.getTitle());
-			String seatUrl = "http://localhost:8085/shows/seats/lock?showId=" + showId;
+		ShowDto show = response.getBody().getData();
 
-			System.out.println("Calling Seat Lock API: " + seatUrl);
+		// FIRST: Lock seats in TheaterService database
+		String seatUrl = "http://localhost:8085/shows/seats/lock?showId=" + showId + "&customerId=" + customerId;
+		restTemplate.exchange(seatUrl, HttpMethod.POST, new HttpEntity<>(seats),
+				new ParameterizedTypeReference<List<SeatDto>>() {
+				});
 
-			ResponseEntity<List<SeatDto>> seatResponse = restTemplate.exchange(seatUrl, HttpMethod.POST,
-					new HttpEntity<>(seats), new ParameterizedTypeReference<List<SeatDto>>() {
-					});
+		// SECOND: Store booking details in Redis
+		String seatNumbers = String.join(",", seats);
+		double totalAmount = show.getPrice() * seats.size();
 
-			if (seatResponse.getBody() == null || seatResponse.getBody().isEmpty()) {
-				throw new SeatNotFoundException("SEATS COULD NOT BE LOCKED");
-			}
+		String data = show.getTitle() + "|" + show.getDate() + "|" + show.getTime() + "|"
+		        + show.getLanguage() + "|" + show.getScreenno() + "|" + seatNumbers + "|"
+		        + show.getDate() + "|" + show.getLanguage() + "|" + customer.getName() + "|"
+		        + show.getScreenno() + "|" + totalAmount + "|" + customer.getName() + "|" + showId;
 
-			seatsLocked = true;
+		String key = "confirmticket:" + customerId;
 
-			System.out.println("Seats locked successfully");
-
-			// 4. Calculate total amount
-			double totalAmount = show.getPrice() * seats.size();
-
-			// 5. Create ticket
-			Ticket ticket = new Ticket(customer.getName(), String.join(",", seats), show.getTime(), show.getTitle(),
-					show.getScreenno(), totalAmount, show.getDate(), show.getLanguage(), LocalDateTime.now());
-
-			System.out.println("Ticket object created");
-			System.out.println("Total amount: " + totalAmount);
-
-			// 6. Save ticket
-			Ticket savedTicket = ticketRepo.saveAndFlush(ticket);
-
-			System.out.println("Ticket saved successfully. Ticket ID: " + savedTicket.getId());
-
-			return savedTicket;
-
-		} catch (HttpClientErrorException.Conflict e) {
-
-			throw new SeatNotAvailableException("SELECTED SEAT IS NOT AVAILABLE");
-
-		} catch (HttpClientErrorException.NotFound e) {
-
-			throw new SeatNotFoundException("SHOW OR SELECTED SEATS NOT FOUND");
-
-		} catch (RuntimeException e) {
-
-			System.out.println("BOOKING FAILED: " + e.getMessage());
-
-			throw e;
-		}
+		redisTemplate.opsForValue().set(key, data, Duration.ofSeconds(30));
 	}
 
-	public Ticket bookTicketPayment(long ticketId) {
-		Ticket ticket = ticketRepo.findById((int) ticketId)
-				.orElseThrow(() -> new TicketNotFoundException("TICKET NOT FOUND"));
+//	public Ticket bookTicketPayment(long ticketId) {
+//		Ticket ticket = ticketRepo.findById((int) ticketId)
+//				.orElseThrow(() -> new TicketNotFoundException("TICKET NOT FOUND"));
+//
+//		// Simulated payment
+//		boolean paymentSuccess = true;
+//		if (paymentSuccess) {
+//			ticket.setPaymentStatus(true);
+//		}
+//		return ticketRepo.save(ticket);
+//	}
 
-		// Simulated payment
-		boolean paymentSuccess = true;
-		if (paymentSuccess) {
-			ticket.setPaymentStatus(true);
-		}
-		return ticketRepo.save(ticket);
+	public Ticket confirmTicketPayment(long customerid) {
+
+		String key = "confirmticket:" + customerid;
+
+		String data = redisTemplate.opsForValue().get(key);
+
+		if (data == null)
+			throw new RuntimeException("Ticket details not found");
+
+		String[] arr = data.split("\\|");
+		long showId = Long.parseLong(arr[12]);
+
+		List<String> seats = Arrays.asList(arr[5].split(","));
+
+		String url = "http://localhost:8085/shows/seats/confirm?showId="
+		        + showId + "&customerId=" + customerid;
+
+		restTemplate.postForEntity(url, seats, String.class);
+		Ticket t = new Ticket();
+
+		t.setUsername(arr[11]);
+		t.setSeatno(arr[5]);
+		t.setShowtime(LocalTime.parse(arr[2]));
+		t.setMoviename(arr[0]);
+		t.setScreenno(Integer.parseInt(arr[9]));
+		t.setTotalamount(Double.parseDouble(arr[10]));
+		t.setDate(Date.valueOf(arr[1]));
+		t.setLanguage(arr[3]);
+		t.setBookingDate(LocalDateTime.now());
+		t.setPaymentStatus(true);
+
+		Ticket savedTicket = ticketRepo.save(t);
+
+		redisTemplate.delete(key);
+
+		return savedTicket;
 	}
 }

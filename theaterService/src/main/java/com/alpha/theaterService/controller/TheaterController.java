@@ -125,10 +125,10 @@ public class TheaterController {
 
 	// LOCK SELECTED SEATS
 	@PostMapping("/shows/seats/lock")
-	public ResponseEntity<List<Seat>> lockSeats(@RequestParam long showId, @RequestBody List<String> seatNumbers) {
+	public ResponseEntity<List<Seat>> lockSeats(@RequestParam long showId, @RequestParam long customerId,
+			@RequestBody List<String> seatNumbers) {
 
-		List<Seat> seats = theaterservice.lockSeats(showId, seatNumbers);
-
+		List<Seat> seats = theaterservice.lockSeats(showId, customerId, seatNumbers);
 		return ResponseEntity.ok(seats);
 	}
 
@@ -138,6 +138,16 @@ public class TheaterController {
 
 		String response = theaterservice.buyTicket(id, sid, seatno);
 		return ResponseEntity.ok(response);
+	}
+	
+	@PostMapping("/shows/seats/confirm")
+	public ResponseEntity<String> confirmSeats(
+	        @RequestParam long showId,
+	        @RequestParam long customerId,
+	        @RequestBody List<String> seatNumbers) {
+
+	    String result = theaterservice.confirmSeats(showId, customerId, seatNumbers);
+	    return ResponseEntity.ok(result);
 	}
 
 }
