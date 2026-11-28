@@ -151,14 +151,14 @@ public class CustomerService {
 		String seatNumbers = String.join(",", seats);
 		double totalAmount = show.getPrice() * seats.size();
 
-		String data = show.getTitle() + "|" + show.getDate() + "|" + show.getTime() + "|"
-		        + show.getLanguage() + "|" + show.getScreenno() + "|" + seatNumbers + "|"
-		        + show.getDate() + "|" + show.getLanguage() + "|" + customer.getName() + "|"
-		        + show.getScreenno() + "|" + totalAmount + "|" + customer.getName() + "|" + showId;
+		String data = show.getTitle() + "|" + show.getDate() + "|" + show.getTime() + "|" + show.getLanguage() + "|"
+				+ show.getScreenno() + "|" + seatNumbers + "|" + show.getDate() + "|" + show.getLanguage() + "|"
+				+ customer.getName() + "|" + show.getScreenno() + "|" + totalAmount + "|" + customer.getName() + "|"
+				+ showId;
 
 		String key = "confirmticket:" + customerId;
 
-		redisTemplate.opsForValue().set(key, data, Duration.ofSeconds(30));
+		redisTemplate.opsForValue().set(key, data, Duration.ofSeconds(40));
 	}
 
 //	public Ticket bookTicketPayment(long ticketId) {
@@ -174,25 +174,16 @@ public class CustomerService {
 //	}
 
 	public Ticket confirmTicketPayment(long customerid) {
-
 		String key = "confirmticket:" + customerid;
-
 		String data = redisTemplate.opsForValue().get(key);
-
 		if (data == null)
 			throw new RuntimeException("Ticket details not found");
-
 		String[] arr = data.split("\\|");
 		long showId = Long.parseLong(arr[12]);
-
 		List<String> seats = Arrays.asList(arr[5].split(","));
-
-		String url = "http://localhost:8085/shows/seats/confirm?showId="
-		        + showId + "&customerId=" + customerid;
-
+		String url = "http://localhost:8085/shows/seats/confirm?showId=" + showId + "&customerId=" + customerid;
 		restTemplate.postForEntity(url, seats, String.class);
 		Ticket t = new Ticket();
-
 		t.setUsername(arr[11]);
 		t.setSeatno(arr[5]);
 		t.setShowtime(LocalTime.parse(arr[2]));
@@ -203,11 +194,17 @@ public class CustomerService {
 		t.setLanguage(arr[3]);
 		t.setBookingDate(LocalDateTime.now());
 		t.setPaymentStatus(true);
-
 		Ticket savedTicket = ticketRepo.save(t);
-
 		redisTemplate.delete(key);
-
 		return savedTicket;
+	}
+
+	public List<Long> cancelSeatSelectionTransaction(long customerId) {
+		String url = "http://localhost:8085/show/seats/cancel?customerId=" + customerId;
+		ResponseEntity<List<Long>> response = restTemplate.exchange(url, HttpMethod.DELETE, null,
+				new ParameterizedTypeReference<List<Long>>() {
+				});
+		redisTemplate.delete("confirmticket:" + customerId);
+		return response.getBody();
 	}
 }

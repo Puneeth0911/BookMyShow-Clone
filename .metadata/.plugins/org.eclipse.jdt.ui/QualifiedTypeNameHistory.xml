@@ -17,7 +17,6 @@
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestBody"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="com.alpha.customerService.repository.CustomerRepository"/>
     <fullyQualifiedTypeName name="com.alpha.customerService.dto.ResponseStructure"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Column"/>
@@ -39,4 +38,5 @@
     <fullyQualifiedTypeName name="com.alpha.customerService.exception.TicketNotFoundException"/>
     <fullyQualifiedTypeName name="com.alpha.customerService.exception.SeatNotAvailableException"/>
     <fullyQualifiedTypeName name="org.springframework.data.redis.core.RedisTemplate"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
 </qualifiedTypeNameHistroy>

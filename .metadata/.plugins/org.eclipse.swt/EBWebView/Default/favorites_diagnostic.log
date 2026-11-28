@@ -357,3 +357,163 @@
 2026-11-24 17:30:26.261: [INFO] BookmarksLoadDropped droppedNodes=0
 2026-11-24 17:30:26.261: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
 2026-11-24 17:31:03.677: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-25 15:11:10.776: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-25 15:11:10.776: [INFO] Profiles total count: 1
+2026-11-25 15:11:10.776: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-24T17:31:01.776Z
+2026-11-25 15:11:10.776: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-25 15:11:10.776: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-24T17:31:01.776Z
+2026-11-25 15:11:10.776: [INFO] OnDoneLoading sync enabled: 0
+2026-11-25 15:11:10.776: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-25 15:11:10.776: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-25 15:11:10.776: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-25 15:22:22.625: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-25 15:25:48.827: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-25 15:25:48.827: [INFO] Profiles total count: 1
+2026-11-25 15:25:48.827: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-24T17:31:01.776Z
+2026-11-25 15:25:48.827: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-25 15:25:48.827: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-24T17:31:01.776Z
+2026-11-25 15:25:48.827: [INFO] OnDoneLoading sync enabled: 0
+2026-11-25 15:25:48.827: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-25 15:25:48.827: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-25 15:25:48.827: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-25 16:05:57.479: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-25 16:06:22.583: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-25 16:06:22.583: [INFO] Profiles total count: 1
+2026-11-25 16:06:22.583: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-25 16:06:22.583: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-25 16:06:22.583: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-25 16:06:22.583: [INFO] OnDoneLoading sync enabled: 0
+2026-11-25 16:06:22.583: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-25 16:06:22.583: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-25 16:06:22.583: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-25 16:33:38.437: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 06:12:28.162: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 06:12:28.162: [INFO] Profiles total count: 1
+2026-11-26 06:12:28.162: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 06:12:28.162: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 06:12:28.162: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 06:12:28.162: [INFO] OnDoneLoading sync enabled: 0
+2026-11-26 06:12:28.162: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-26 06:12:28.162: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-26 06:12:28.162: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 07:41:02.832: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 09:54:17.586: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 09:54:17.586: [INFO] Profiles total count: 1
+2026-11-26 09:54:17.586: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 09:54:17.586: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 09:54:17.586: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 09:54:17.586: [INFO] OnDoneLoading sync enabled: 0
+2026-11-26 09:54:17.586: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-26 09:54:17.586: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-26 09:54:17.586: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 10:10:31.881: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:13:25.687: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:13:25.687: [INFO] Profiles total count: 1
+2026-11-26 11:13:25.687: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:13:25.687: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:13:25.687: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:13:25.687: [INFO] OnDoneLoading sync enabled: 0
+2026-11-26 11:13:25.687: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-26 11:13:25.687: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-26 11:13:25.687: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:31:06.883: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:31:46.119: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:31:46.119: [INFO] Profiles total count: 1
+2026-11-26 11:31:46.119: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:31:46.119: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:31:46.119: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:31:46.119: [INFO] OnDoneLoading sync enabled: 0
+2026-11-26 11:31:46.119: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-26 11:31:46.119: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-26 11:31:46.119: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:34:29.214: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:34:53.702: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:34:53.702: [INFO] Profiles total count: 1
+2026-11-26 11:34:53.702: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:34:53.702: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:34:53.702: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:34:53.702: [INFO] OnDoneLoading sync enabled: 0
+2026-11-26 11:34:53.702: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-26 11:34:53.702: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-26 11:34:53.702: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:40:30.400: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:41:33.248: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:41:33.248: [INFO] Profiles total count: 1
+2026-11-26 11:41:33.248: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:41:33.248: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:41:33.248: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:41:33.248: [INFO] OnDoneLoading sync enabled: 0
+2026-11-26 11:41:33.248: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-26 11:41:33.248: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-26 11:41:33.248: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:41:42.341: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:41:44.855: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:41:44.855: [INFO] Profiles total count: 1
+2026-11-26 11:41:44.855: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:41:44.855: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:41:44.855: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:41:44.855: [INFO] OnDoneLoading sync enabled: 0
+2026-11-26 11:41:44.855: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-26 11:41:44.855: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-26 11:41:44.855: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:44:51.327: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 11:56:30.867: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:56:30.867: [INFO] Profiles total count: 1
+2026-11-26 11:56:30.867: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:56:30.867: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-26 11:56:30.867: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-26 11:56:30.867: [INFO] OnDoneLoading sync enabled: 0
+2026-11-26 11:56:30.867: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-26 11:56:30.867: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-26 11:56:30.867: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-26 12:37:53.909: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-27 06:58:32.808: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-27 06:58:32.808: [INFO] Profiles total count: 1
+2026-11-27 06:58:32.808: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-27 06:58:32.808: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-27 06:58:32.808: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-27 06:58:32.808: [INFO] OnDoneLoading sync enabled: 0
+2026-11-27 06:58:32.808: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-27 06:58:32.808: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-27 06:58:32.808: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-27 07:36:24.827: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-27 11:12:14.462: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-27 11:12:14.462: [INFO] Profiles total count: 1
+2026-11-27 11:12:14.462: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-27 11:12:14.462: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-27 11:12:14.462: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-27 11:12:14.462: [INFO] OnDoneLoading sync enabled: 0
+2026-11-27 11:12:14.462: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-27 11:12:14.462: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-27 11:12:14.462: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-27 12:56:58.811: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-27 16:22:42.392: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-27 16:22:42.392: [INFO] Profiles total count: 1
+2026-11-27 16:22:42.392: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-27 16:22:42.392: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-27 16:22:42.392: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-27 16:22:42.392: [INFO] OnDoneLoading sync enabled: 0
+2026-11-27 16:22:42.392: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-27 16:22:42.392: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-27 16:22:42.392: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-27 16:28:44.436: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-27 16:32:13.102: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-27 16:32:13.102: [INFO] Profiles total count: 1
+2026-11-27 16:32:13.102: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-27 16:32:13.102: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-27 16:32:13.102: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-27 16:32:13.102: [INFO] OnDoneLoading sync enabled: 0
+2026-11-27 16:32:13.102: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-27 16:32:13.102: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-27 16:32:13.102: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-27 17:45:19.233: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-28 08:45:14.444: [INFO] CurrentProfilePath: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-28 08:45:14.444: [INFO] Profiles total count: 1
+2026-11-28 08:45:14.444: [INFO] Profile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-28 08:45:14.444: [INFO] LastUsedProfileDir: C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-11-28 08:45:14.444: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\HP\BookMyShow\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-11-25T15:36:18.559Z
+2026-11-28 08:45:14.444: [INFO] OnDoneLoading sync enabled: 0
+2026-11-28 08:45:14.444: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-28 08:45:14.444: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-28 08:45:14.444: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-28 09:23:07.282: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1

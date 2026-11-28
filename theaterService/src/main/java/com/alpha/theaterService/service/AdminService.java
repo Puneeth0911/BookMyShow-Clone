@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.alpha.theaterService.dto.CreateMovieDto;
 import com.alpha.theaterService.dto.ResponseStructure;
 import com.alpha.theaterService.entity.Movie;
+import com.alpha.theaterService.exception.MovieNotFoundException;
 import com.alpha.theaterService.repository.MovieRepository;
 
 @Service
@@ -50,4 +51,22 @@ public class AdminService {
 		rs.setData(movies);
 		return new ResponseEntity<ResponseStructure<List<Movie>>>(rs, HttpStatus.OK);
 	}
+
+	public Movie updateMovie(long id, CreateMovieDto dto) {
+		Movie movie = movierepository.findById(id).orElse(null);
+		if (movie == null) {
+			throw new MovieNotFoundException();
+		}
+		movie.setTitle(dto.getTitle());
+		movie.setDescription(dto.getDescription());
+		movie.setCast(dto.getMoviecast());
+		movie.setDuration(dto.getDuration());
+		movie.setLanguages(dto.getLanguages());
+		return movierepository.save(movie);
+	}
+
+	public List<Movie> searchMovies(String name) {
+		return movierepository.findByTitleContainingIgnoreCase(name);
+	}
+
 }

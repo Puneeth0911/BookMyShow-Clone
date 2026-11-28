@@ -29,17 +29,21 @@ public class CustomerController {
 	private CustomerService customerservice;
 
 	@PostMapping("/customer/createAccount")
+//	http://localhost:8085/customer/createAccount
+//	{"name":"Puneeth","mail":"Puneeth@gmail.com","phone":9399320400,"age":21,"gender":"male"}
 	public ResponseEntity<ResponseStructure<Customer>> create(@RequestBody CreateCustomerDto c) {
 		System.out.println("Customer Registered");
 		return customerservice.createCustomerAccount(c);
 	}
 
 	@GetMapping("/customer/find")
+//	http://localhost:8085/customers/find?id=1
 	public ResponseEntity<ResponseStructure<Customer>> findCustomer(@RequestParam long id) {
 		return customerservice.findCustomerById(id);
 	}
 
 	@DeleteMapping("/customer/delete")
+//	http://localhost:8085/customer/delete?id=1
 	public ResponseEntity<ResponseStructure<String>> deleteCustomer(@RequestParam long id) {
 		return customerservice.deleteCustomer(id);
 	}
@@ -73,4 +77,9 @@ public class CustomerController {
 		return ResponseEntity.ok(ticket);
 	}
 
+	@DeleteMapping("/cancelseatselectiontransaction")
+	public ResponseEntity<List<Long>> cancelSeatSelectionTransaction(@RequestParam long customerid) {
+		List<Long> showIds = customerservice.cancelSeatSelectionTransaction(customerid);
+		return ResponseEntity.ok(showIds);
+	}
 }

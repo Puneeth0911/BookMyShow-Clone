@@ -1,4 +1,3 @@
-
 package com.alpha.theaterService;
 
 import org.springframework.boot.SpringApplication;
@@ -12,23 +11,17 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @SpringBootApplication
 public class TheaterServiceApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(TheaterServiceApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(TheaterServiceApplication.class, args);
+	}
 
-    @Bean
-    public RedisTemplate<String, String> redisTemplate(
-            RedisConnectionFactory redisConnectionFactory) {
-
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-
-        template.setConnectionFactory(redisConnectionFactory);
-
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-
-        template.afterPropertiesSet();
-
-        return template;
-    }
+	@Bean
+	public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, String> template = new RedisTemplate<>();
+		template.setConnectionFactory(redisConnectionFactory);
+		template.setKeySerializer(new StringRedisSerializer());
+		template.setValueSerializer(new StringRedisSerializer());
+		template.afterPropertiesSet();
+		return template;
+	}
 }

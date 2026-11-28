@@ -5,6 +5,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ import com.alpha.theaterService.repository.SeatRepository;
 import com.alpha.theaterService.repository.ShowRepository;
 import com.alpha.theaterService.repository.TheaterRepository;
 import jakarta.transaction.Transactional;
+import com.alpha.theaterService.dto.UpdateTheaterDto;
 
 @Service
 public class TheaterService {
@@ -44,7 +47,7 @@ public class TheaterService {
 	@Autowired
 	private SeatRepository seatRepo;
 
-	// CREATE THEATER
+//	 CREATE THEATER
 	public ResponseEntity<ResponseStructure<Theater>> createTheaterAccount(Theater t) {
 		Theater theatersaved = theaterrepository.save(t);
 		ResponseStructure<Theater> rs = new ResponseStructure<>();
@@ -54,7 +57,7 @@ public class TheaterService {
 		return new ResponseEntity<>(rs, HttpStatus.CREATED);
 	}
 
-	// FIND THEATER
+//	 FIND THEATER
 	public ResponseEntity<ResponseStructure<Theater>> findTheater(long id) {
 		Theater theater = theaterrepository.findById(id).orElseThrow(() -> new TheaterNotFoundException());
 		ResponseStructure<Theater> rs = new ResponseStructure<>();
@@ -64,7 +67,7 @@ public class TheaterService {
 		return new ResponseEntity<>(rs, HttpStatus.OK);
 	}
 
-	// DELETE THEATER
+//	 DELETE THEATER
 	public ResponseEntity<ResponseStructure<String>> deleteTheater(long id) {
 		Theater theater = theaterrepository.findById(id).orElseThrow(() -> new TheaterNotFoundException());
 		theaterrepository.delete(theater);
@@ -75,7 +78,7 @@ public class TheaterService {
 		return new ResponseEntity<>(rs, HttpStatus.OK);
 	}
 
-	// CREATE NEW SHOW
+//	 CREATE NEW SHOW
 	public ResponseEntity<ResponseStructure<Show>> createNewShow(long theaterid, NewShowDto dto) {
 		Theater theater = theaterrepository.findById(theaterid).orElseThrow(() -> new TheaterNotFoundException());
 		Movie movie = movierepository.findById(dto.getMovieId()).orElseThrow(() -> new MovieNotFoundException());
@@ -109,7 +112,7 @@ public class TheaterService {
 		return new ResponseEntity<>(rs, HttpStatus.CREATED);
 	}
 
-	// GENERATE SEATS
+//	 GENERATE SEATS
 	public List<Seat> generateSeats(int capacity, Show show) {
 		if (capacity <= 0) {
 			throw new IllegalArgumentException("Capacity must be positive");
@@ -145,7 +148,7 @@ public class TheaterService {
 		return seats;
 	}
 
-	// GET ALL PLAYING SHOWS
+//	 GET ALL PLAYING SHOWS
 	public ResponseEntity<ResponseStructure<List<Show>>> getAllPlayingShows(long theaterid) {
 		Theater theater = theaterrepository.findById(theaterid).orElseThrow(() -> new TheaterNotFoundException());
 		List<Show> shows = theater.getAllPlayingShows();
@@ -196,7 +199,7 @@ public class TheaterService {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	// FIND AVAILABLE SEATS
+//	 FIND AVAILABLE SEATS
 	public List<Seat> findAvailableSeats(long showId) {
 		if (!showrepository.existsById(showId)) {
 			throw new ShowNotFoundException();
@@ -204,7 +207,8 @@ public class TheaterService {
 		return seatRepo.findByShow_IdAndStatus(showId, "AVAILABLE");
 	}
 
-	// LOCK SELECTED SEATS
+//	 LOCK SELECTED SEATS
+
 	@Transactional
 	public List<Seat> lockSeats(long showId, long customerId, List<String> seatNumbers) {
 
@@ -213,6 +217,7 @@ public class TheaterService {
 		}
 
 		List<String> lockedKeys = new ArrayList<>();
+		List<String> customerSeats = new ArrayList<>();
 
 		for (int i = 0; i < seatNumbers.size(); i++) {
 			seatNumbers.set(i, seatNumbers.get(i).toUpperCase());
@@ -230,12 +235,14 @@ public class TheaterService {
 			}
 		}
 
+		String customerKey = "customerlocks:" + customerId;
+
 		for (Seat seat : seats) {
 
 			String key = "lockseat:" + showId + ":" + seat.getSeatno();
 
 			Boolean locked = redisTemplate.opsForValue().setIfAbsent(key, String.valueOf(customerId),
-					Duration.ofSeconds(30));
+					Duration.ofSeconds(40));
 
 			if (!Boolean.TRUE.equals(locked)) {
 
@@ -243,11 +250,23 @@ public class TheaterService {
 					redisTemplate.delete(lockedKey);
 				}
 
+				for (String customerSeat : customerSeats) {
+					redisTemplate.opsForSet().remove(customerKey, customerSeat);
+				}
+
 				throw new SeatAlreadySelectedException();
 			}
 
 			lockedKeys.add(key);
+
+			String seatData = showId + ":" + seat.getSeatno();
+
+			redisTemplate.opsForSet().add(customerKey, seatData);
+
+			customerSeats.add(seatData);
 		}
+
+		redisTemplate.expire(customerKey, Duration.ofSeconds(40));
 
 		return seats;
 	}
@@ -285,7 +304,7 @@ public class TheaterService {
 		}
 		String key = "lockseat:" + showId + ":" + seatNo.toUpperCase();
 		Boolean locked = redisTemplate.opsForValue().setIfAbsent(key, String.valueOf(customerId),
-				Duration.ofSeconds(20));
+				Duration.ofSeconds(40));
 		if (!Boolean.TRUE.equals(locked)) {
 			throw new SeatAlreadySelectedException();
 		}
@@ -295,34 +314,121 @@ public class TheaterService {
 
 	@Transactional
 	public String confirmSeats(long showId, long customerId, List<String> seatNumbers) {
-
 	    List<Seat> seats = seatRepo.findByShow_IdAndSeatnoIn(showId, seatNumbers);
-
 	    if (seats.size() != seatNumbers.size()) {
 	        throw new SeatNotFoundException("SELECTED SEATS NOT FOUND");
 	    }
-
 	    for (Seat seat : seats) {
+	        if (!seat.getStatus().equalsIgnoreCase("AVAILABLE")) {
+	            throw new SeatAlreadySelectedException();
+	        }
 	        String key = "lockseat:" + showId + ":" + seat.getSeatno();
-
 	        String owner = redisTemplate.opsForValue().get(key);
-
 	        if (!String.valueOf(customerId).equals(owner)) {
 	            throw new SeatAlreadySelectedException();
 	        }
 	    }
-
 	    for (Seat seat : seats) {
 	        seat.setStatus("BOOKED");
 	    }
-
 	    seatRepo.saveAll(seats);
-
+	    String customerKey = "customerlocks:" + customerId;
 	    for (Seat seat : seats) {
 	        String key = "lockseat:" + showId + ":" + seat.getSeatno();
-	        redisTemplate.delete(key);
+	        String owner = redisTemplate.opsForValue().get(key);
+	        if (String.valueOf(customerId).equals(owner)) {
+	            redisTemplate.delete(key);
+	        }
+	        redisTemplate.opsForSet().remove(customerKey, showId + ":" + seat.getSeatno());
 	    }
-
 	    return "Seats confirmed successfully";
+	}
+
+//	 UPDATE THEATER ACCOUNT
+	public ResponseEntity<ResponseStructure<Theater>> updateTheaterAccount(long theaterid, UpdateTheaterDto dto) {
+		Theater theater = theaterrepository.findById(theaterid).orElseThrow(() -> new TheaterNotFoundException());
+		if (dto.getName() != null) {
+			theater.setName(dto.getName());
+		}
+		if (dto.getDescription() != null) {
+			theater.setDescription(dto.getDescription());
+		}
+		if (dto.getCity() != null) {
+			theater.setCity(dto.getCity());
+		}
+		if (dto.getContactno() != null) {
+			theater.setContactno(dto.getContactno());
+		}
+		if (dto.getMailid() != null) {
+			theater.setMailid(dto.getMailid());
+		}
+		Theater updatedTheater = theaterrepository.save(theater);
+		ResponseStructure<Theater> rs = new ResponseStructure<>();
+		rs.setStatuscode(HttpStatus.OK.value());
+		rs.setMessage("Theater account updated successfully");
+		rs.setData(updatedTheater);
+		return new ResponseEntity<>(rs, HttpStatus.OK);
+	}
+
+	public ResponseEntity<Object> deleteShow(long theaterid, long showid) {
+		System.out.println("Theater ID: " + theaterid);
+		System.out.println("Show ID: " + showid);
+		System.out.println("Total Shows: " + showrepository.count());
+		showrepository.findAll().forEach(s -> System.out.println("Available Show ID: " + s.getId()));
+		Theater theater = theaterrepository.findById(theaterid).orElseThrow(() -> new TheaterNotFoundException());
+		Show show = showrepository.findById(showid).orElseThrow(() -> new ShowNotFoundException());
+		if (show.getTheater().getId() != theaterid) {
+			throw new RuntimeException("Show does not belong to this theater");
+		}
+		showrepository.delete(show);
+		return ResponseEntity.ok("Show deleted successfully");
+	}
+
+	public List<Show> findByDate(long theaterid, String date) {
+		return showrepository.findByTheater_IdAndDate(theaterid, Date.valueOf(date));
+	}
+
+	public List<Show> findShowsByMovie(long theaterid, String title) {
+		return showrepository.findByTheater_IdAndTitleContainingIgnoreCase(theaterid, title);
+	}
+
+	public List<Show> findShowsByScreen(long theaterid, int screennumber) {
+		return showrepository.findByTheater_IdAndScreennumber(theaterid, screennumber);
+	}
+
+	public Show getShowDetails(long theaterid, long showid) {
+		theaterrepository.findById(theaterid).orElseThrow(() -> new TheaterNotFoundException());
+		Show show = showrepository.findById(showid).orElseThrow(() -> new ShowNotFoundException());
+		if (show.getTheater().getId() != theaterid) {
+			throw new RuntimeException("Show does not belong to this theater");
+		}
+		return show;
+	}
+
+	public List<Long> cancelSeatSelection(long customerId) {
+		String customerKey = "customerlocks:" + customerId;
+		Set<String> lockedSeats = redisTemplate.opsForSet().members(customerKey);
+		List<Long> showIds = new ArrayList<>();
+		if (lockedSeats == null || lockedSeats.isEmpty()) {
+			return showIds;
+		}
+		for (String seat : lockedSeats) {
+			String[] arr = seat.split(":");
+			long showId = Long.parseLong(arr[0]);
+			String seatNo = arr[1];
+			String key = "lockseat:" + showId + ":" + seatNo;
+			// Check whether the lock belongs to this customer
+			String owner = redisTemplate.opsForValue().get(key);
+			if (String.valueOf(customerId).equals(owner)) {
+				redisTemplate.delete(key);
+				if (!showIds.contains(showId)) {
+					showIds.add(showId);
+				}
+			}
+			// Remove seat from customer mapping
+			redisTemplate.opsForSet().remove(customerKey, seat);
+		}
+		redisTemplate.delete(customerKey);
+		return showIds;
 	}
 }
